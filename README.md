@@ -7,10 +7,9 @@ A modern Flask-based student payment management system with SpaceX-inspired desi
 - **Student Authentication**: Secure login system with rate limiting
 - **Payment Management**: Make payments, view transaction history
 - **Invoice System**: Pay pending invoices with passcode verification
-- **PDF Receipts**: Generate formal Anna University-style receipts
+- **PDF Receipts**: Generate formal University-style receipts
 - **Multiple Payment Gateways**: Support for Razorpay, Stripe, PayPal
 - **Security**: Rate limiting, secure sessions, input validation
-- **Modern UI**: SpaceX-inspired dark theme with responsive design
 
 ## Quick Start
 
