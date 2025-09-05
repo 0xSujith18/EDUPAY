@@ -1,0 +1,74 @@
+/* Custom styles for EduPay */
+
+/* General styles */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border: none;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+    padding: 15px 20px;
+}
+
+/* Navbar styles */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Table styles */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+}
+
+/* Button styles */
+.btn {
+    border-radius: 5px;
+    padding: 8px 16px;
+}
+
+/* Alert styles */
+.alert {
+    border-radius: 5px;
+}
+
+/* Form styles */
+.form-control {
+    border-radius: 5px;
+    padding: 10px 15px;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #86b7fe;
+}
+
+/* Badge styles */
+.badge {
+    padding: 6px 10px;
+    font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 15px;
+    }
+}
