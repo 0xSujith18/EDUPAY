@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+
+{% block title %}Payment Gateways{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Choose Payment Method</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Amount to Add (₹)</label>
+                    <input type="number" id="amount" step="0.01" min="1" class="form-control" placeholder="Enter amount">
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card gateway-card" onclick="redirectToGateway('razorpay')">
+                            <div class="card-body text-center">
+                                <div class="gateway-icon">💳</div>
+                                <h6>Razorpay</h6>
+                                <small style="color: #ffffff; opacity: 0.8;">UPI, GPay, Cards, Net Banking</small>
+                                <div class="mt-2">
+                                    <span class="badge bg-info">INR</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card gateway-card" onclick="redirectToGateway('stripe')">
+                            <div class="card-body text-center">
+                                <div class="gateway-icon">💰</div>
+                                <h6>Stripe</h6>
+                                <small style="color: #ffffff; opacity: 0.8;">International Cards</small>
+                                <div class="mt-2">
+                                    <span class="badge bg-info">USD</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card gateway-card" onclick="redirectToGateway('paypal')">
+                            <div class="card-body text-center">
+                                <div class="gateway-icon">🏦</div>
+                                <h6>PayPal</h6>
+                                <small style="color: #ffffff; opacity: 0.8;">PayPal Account, Cards</small>
+                                <div class="mt-2">
+                                    <span class="badge bg-info">USD</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.gateway-card {
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+.gateway-card:hover {
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+}
+.gateway-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+</style>
+
+<script>
+function redirectToGateway(gateway) {
+    const amount = document.getElementById('amount').value;
+    if (!amount || amount <= 0) {
+        alert('Please enter a valid amount');
+        return;
+    }
+    
+    const urls = {
+        'razorpay': 'https://razorpay.com/',
+        'stripe': 'https://stripe.com/',
+        'paypal': 'https://www.paypal.com/'
+    };
+    
+    // Store payment info in session storage
+    sessionStorage.setItem('pendingPayment', JSON.stringify({
+        gateway: gateway,
+        amount: parseFloat(amount),
+        timestamp: Date.now()
+    }));
+    
+    // Open payment gateway website
+    console.log('Opening:', urls[gateway]);
+    const newWindow = window.open(urls[gateway], '_blank');
+    if (!newWindow) {
+        alert('Please allow popups for this site to open payment gateway.');
+        return;
+    }
+    
+    // Show payment completion dialog
+    setTimeout(() => {
+        if (confirm('Have you completed the payment on ' + gateway.toUpperCase() + '?\n\nClick OK if payment was successful, Cancel if not.')) {
+            fetch('/verify_payment', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    gateway: gateway,
+                    amount: parseFloat(amount),
+                    payment_id: gateway + '_' + Date.now()
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Payment successful! Amount added to your account.');
+                    window.location.href = '/dashboard';
+                } else {
+                    alert('❌ Payment verification failed. Please try again.');
+                }
+            })
+            .catch(() => {
+                alert('❌ Connection error. Please try again.');
+            });
+        }
+    }, 2000);
+}
+</script>
+{% endblock %}

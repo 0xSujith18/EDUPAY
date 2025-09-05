@@ -1,0 +1,500 @@
+{% extends "layout.html" %}
+
+{% block title %}Institution Dashboard{% endblock %}
+
+{% block content %}
+<!-- Collection Progress Highlight -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4><i class="fas fa-chart-line me-2"></i>Today's Collection: ₹2,45,000</h4>
+                        <p class="mb-0">Monthly Target: ₹50,00,000 (49% achieved)</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-warning" style="width: 49%">49%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Institution Info -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-school me-2"></i>{{ institution.name }}</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Email:</strong> {{ institution.email }}</p>
+                <p><strong>Phone:</strong> {{ institution.phone }}</p>
+                <p><strong>Address:</strong> {{ institution.address }}</p>
+                <div class="alert alert-success">
+                    <i class="fas fa-users me-2"></i><strong>Students:</strong> 1,250 Active
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Reports -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar me-2"></i>Revenue Reports</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6>Today</h6>
+                                <h4>₹2.45L</h4>
+                                <small>+12% vs yesterday</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6>This Week</h6>
+                                <h4>₹15.2L</h4>
+                                <small>+8% vs last week</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h6>This Month</h6>
+                                <h4>₹24.5L</h4>
+                                <small>49% of target</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h6>Pending</h6>
+                                <h4>₹2.5L</h4>
+                                <small>125 students</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Collection Analytics Graph -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-area me-2"></i>Daily Collection Progress</h5>
+            </div>
+            <div class="card-body">
+                <div style="background: white; border: 2px solid #007bff; border-radius: 8px; padding: 20px; height: 300px;">
+                    <h6 style="text-align: center; color: #000; margin-bottom: 20px;">Daily Collection Trend (Stock Market Style)</h6>
+                    
+                    <!-- Legend -->
+                    <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+                        <div style="margin-right: 20px;">
+                            <span style="color: #28a745; font-size: 12px; font-weight: bold;">Green = Profit</span>
+                        </div>
+                        <div>
+                            <span style="color: #dc3545; font-size: 12px; font-weight: bold;">Red = Loss</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart with SVG -->
+                    <svg width="100%" height="200" style="border-bottom: 2px solid #333;">
+                        <!-- Grid lines -->
+                        <line x1="50" y1="20" x2="550" y2="20" stroke="#e0e0e0" stroke-width="1"/>
+                        <line x1="50" y1="60" x2="550" y2="60" stroke="#e0e0e0" stroke-width="1"/>
+                        <line x1="50" y1="100" x2="550" y2="100" stroke="#e0e0e0" stroke-width="1"/>
+                        <line x1="50" y1="140" x2="550" y2="140" stroke="#e0e0e0" stroke-width="1"/>
+                        
+                        <!-- Data points and connecting lines -->
+                        <!-- Point 1: 180K at (80, 120) -->
+                        <circle cx="80" cy="120" r="5" fill="#28a745"/>
+                        <text x="80" y="110" text-anchor="middle" font-size="10" fill="#000">₹180K</text>
+                        <text x="80" y="190" text-anchor="middle" font-size="10" fill="#000">12/18</text>
+                        
+                        <!-- Line 1-2: Green (up trend) -->
+                        <line x1="80" y1="120" x2="150" y2="80" stroke="#28a745" stroke-width="3"/>
+                        
+                        <!-- Point 2: 220K at (150, 80) -->
+                        <circle cx="150" cy="80" r="5" fill="#28a745"/>
+                        <text x="150" y="70" text-anchor="middle" font-size="10" fill="#000">₹220K</text>
+                        <text x="150" y="190" text-anchor="middle" font-size="10" fill="#000">12/19</text>
+                        
+                        <!-- Line 2-3: Red (down trend) -->
+                        <line x1="150" y1="80" x2="220" y2="140" stroke="#dc3545" stroke-width="3"/>
+                        
+                        <!-- Point 3: 150K at (220, 140) -->
+                        <circle cx="220" cy="140" r="5" fill="#dc3545"/>
+                        <text x="220" y="130" text-anchor="middle" font-size="10" fill="#000">₹150K</text>
+                        <text x="220" y="190" text-anchor="middle" font-size="10" fill="#000">12/20</text>
+                        
+                        <!-- Line 3-4: Green (up trend) -->
+                        <line x1="220" y1="140" x2="290" y2="40" stroke="#28a745" stroke-width="3"/>
+                        
+                        <!-- Point 4: 280K at (290, 40) -->
+                        <circle cx="290" cy="40" r="5" fill="#28a745"/>
+                        <text x="290" y="30" text-anchor="middle" font-size="10" fill="#000">₹280K</text>
+                        <text x="290" y="190" text-anchor="middle" font-size="10" fill="#000">12/21</text>
+                        
+                        <!-- Line 4-5: Green (up trend) -->
+                        <line x1="290" y1="40" x2="360" y2="20" stroke="#28a745" stroke-width="3"/>
+                        
+                        <!-- Point 5: 320K at (360, 20) -->
+                        <circle cx="360" cy="20" r="5" fill="#28a745"/>
+                        <text x="360" y="10" text-anchor="middle" font-size="10" fill="#000">₹320K</text>
+                        <text x="360" y="190" text-anchor="middle" font-size="10" fill="#000">12/22</text>
+                        
+                        <!-- Line 5-6: Red (down trend) -->
+                        <line x1="360" y1="20" x2="430" y2="130" stroke="#dc3545" stroke-width="3"/>
+                        
+                        <!-- Point 6: 190K at (430, 130) -->
+                        <circle cx="430" cy="130" r="5" fill="#dc3545"/>
+                        <text x="430" y="120" text-anchor="middle" font-size="10" fill="#000">₹190K</text>
+                        <text x="430" y="190" text-anchor="middle" font-size="10" fill="#000">12/23</text>
+                        
+                        <!-- Line 6-7: Green (up trend) -->
+                        <line x1="430" y1="130" x2="500" y2="90" stroke="#28a745" stroke-width="3"/>
+                        
+                        <!-- Point 7: 245K at (500, 90) -->
+                        <circle cx="500" cy="90" r="5" fill="#28a745"/>
+                        <text x="500" y="80" text-anchor="middle" font-size="10" fill="#000">₹245K</text>
+                        <text x="500" y="190" text-anchor="middle" font-size="10" fill="#000">12/24</text>
+                    </svg>
+                    
+                    <!-- Trend Indicators -->
+                    <div style="display: flex; justify-content: space-around; margin-top: 10px; font-size: 11px;">
+                        <span style="color: #28a745;">↗ +22%</span>
+                        <span style="color: #dc3545;">↘ -32%</span>
+                        <span style="color: #28a745;">↗ +87%</span>
+                        <span style="color: #28a745;">↗ +14%</span>
+                        <span style="color: #dc3545;">↘ -41%</span>
+                        <span style="color: #28a745;">↗ +29%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student-wise Fee Status -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user-check me-2"></i>Fee Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Paid</span>
+                        <span class="text-success">1,125 (90%)</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Pending</span>
+                        <span class="text-warning">100 (8%)</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" style="width: 8%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Overdue</span>
+                        <span class="text-danger">25 (2%)</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" style="width: 2%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Pending Dues Management -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>Pending Dues & Defaulters</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Fee Type</th>
+                                <th>Due Date</th>
+                                <th>Amount</th>
+                                <th>Days Overdue</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-danger">
+                                <td>John Doe</td>
+                                <td>Tuition Fee</td>
+                                <td>Dec 15, 2023</td>
+                                <td>₹15,000</td>
+                                <td>30 days</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning" onclick="sendReminder('student1', 'Tuition Fee payment overdue')">Send Notice</button>
+                                </td>
+                            </tr>
+                            <tr class="table-warning">
+                                <td>Jane Smith</td>
+                                <td>Lab Fee</td>
+                                <td>Jan 10, 2024</td>
+                                <td>₹5,000</td>
+                                <td>5 days</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" onclick="sendReminder('student2', 'Lab Fee due soon')">Send Reminder</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bullhorn me-2"></i>Send Reminders</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Send To:</label>
+                    <select class="form-select" id="reminderTarget">
+                        <option value="students">Students Only</option>
+                        <option value="parents">Parents Only</option>
+                        <option value="both">Students & Parents</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Message Type:</label>
+                    <select class="form-select" id="messageType">
+                        <option value="due_reminder">Fee Due Reminder</option>
+                        <option value="overdue_notice">Overdue Notice</option>
+                        <option value="payment_confirmation">Payment Confirmation</option>
+                        <option value="custom">Custom Message</option>
+                    </select>
+                </div>
+                <div class="mb-3" id="customMessageDiv" style="display: none;">
+                    <label class="form-label">Custom Message:</label>
+                    <textarea class="form-control" id="customMessage" rows="3" placeholder="Enter your custom message..."></textarea>
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" onclick="sendTargetedReminder()">
+                        <i class="fas fa-paper-plane me-2"></i>Send Reminder
+                    </button>
+                    <button class="btn btn-warning" onclick="sendBulkReminders()">
+                        <i class="fas fa-envelope me-2"></i>Bulk Due Reminders
+                    </button>
+                    <button class="btn btn-danger" onclick="sendOverdueNotices()">
+                        <i class="fas fa-exclamation-circle me-2"></i>Overdue Notices
+                    </button>
+                    <button class="btn btn-success" onclick="exportDefaulters()">
+                        <i class="fas fa-download me-2"></i>Export List
+                    </button>
+                </div>
+                
+                <script>
+                // Show/hide custom message field
+                document.getElementById('messageType').addEventListener('change', function() {
+                    const customDiv = document.getElementById('customMessageDiv');
+                    if (this.value === 'custom') {
+                        customDiv.style.display = 'block';
+                    } else {
+                        customDiv.style.display = 'none';
+                    }
+                });
+                
+                function sendReminder(studentId, message) {
+                    const dueDate = new Date();
+                    dueDate.setDate(dueDate.getDate() + 7);
+                    
+                    fetch('/send_reminder', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            student_id: studentId,
+                            message: message,
+                            due_date: dueDate.toISOString().split('T')[0],
+                            target: 'student'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Reminder sent successfully!');
+                        } else {
+                            alert('Failed to send reminder');
+                        }
+                    });
+                }
+                
+                function sendTargetedReminder() {
+                    const target = document.getElementById('reminderTarget').value;
+                    const messageType = document.getElementById('messageType').value;
+                    let message = '';
+                    
+                    if (messageType === 'custom') {
+                        message = document.getElementById('customMessage').value;
+                        if (!message.trim()) {
+                            alert('Please enter a custom message');
+                            return;
+                        }
+                    } else {
+                        const messages = {
+                            'due_reminder': 'Your fee payment is due. Please pay at your earliest convenience.',
+                            'overdue_notice': 'Your fee payment is overdue. Please pay immediately to avoid penalties.',
+                            'payment_confirmation': 'Your payment has been received and processed successfully.'
+                        };
+                        message = messages[messageType];
+                    }
+                    
+                    fetch('/send_bulk_reminder', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            target: target,
+                            message: message,
+                            message_type: messageType
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Reminder sent to ${data.count} ${target}!`);
+                        } else {
+                            alert('Failed to send reminders');
+                        }
+                    });
+                }
+                
+                function sendBulkReminders() {
+                    fetch('/send_bulk_reminder', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            target: 'both',
+                            message: 'Fee payment reminder: Please clear your pending dues.',
+                            message_type: 'due_reminder'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Bulk reminders sent to ${data.count} recipients!`);
+                        } else {
+                            alert('Failed to send bulk reminders');
+                        }
+                    });
+                }
+                
+                function sendOverdueNotices() {
+                    fetch('/send_bulk_reminder', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            target: 'both',
+                            message: 'URGENT: Your fee payment is overdue. Please pay immediately.',
+                            message_type: 'overdue_notice'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Overdue notices sent to ${data.count} recipients!`);
+                        } else {
+                            alert('Failed to send overdue notices');
+                        }
+                    });
+                }
+                
+                function exportDefaulters() {
+                    alert('Defaulter list exported to CSV!');
+                }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Management Tools -->
+    <div class="col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-tools me-2"></i>Management Tools</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                                <h6>Student Management</h6>
+                                <a href="{{ url_for('student_management') }}" class="btn btn-sm btn-primary">Manage</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-file-invoice fa-2x text-success mb-2"></i>
+                                <h6>Fee Structure</h6>
+                                <a href="{{ url_for('fee_structure') }}" class="btn btn-sm btn-success">Configure</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-info">
+                            <div class="card-body text-center">
+                                <i class="fas fa-chart-pie fa-2x text-info mb-2"></i>
+                                <h6>Analytics</h6>
+                                <a href="{{ url_for('analytics') }}" class="btn btn-sm btn-info">View Reports</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-warning">
+                            <div class="card-body text-center">
+                                <i class="fas fa-cog fa-2x text-warning mb-2"></i>
+                                <h6>Settings</h6>
+                                <a href="{{ url_for('settings') }}" class="btn btn-sm btn-warning">Configure</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
+</div>
+{% endblock %}

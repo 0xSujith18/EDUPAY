@@ -1,0 +1,247 @@
+{% extends "layout.html" %}
+
+{% block title %}Analytics & Reports{% endblock %}
+
+{% block content %}
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h4>₹25.0L</h4>
+                <p class="mb-0">Total Collections</p>
+                <small>This Month</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h4>92%</h4>
+                <p class="mb-0">Collection Rate</p>
+                <small>Above Target</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h4>₹3.5L</h4>
+                <p class="mb-0">Pending Amount</p>
+                <small>8% of Total</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h4>125</h4>
+                <p class="mb-0">Active Students</p>
+                <small>All Courses</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Monthly Collection Trend -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line me-2"></i>Monthly Collection Trend</h5>
+            </div>
+            <div class="card-body">
+                <div id="monthlyChart" style="background: white; border: 2px solid #007bff; border-radius: 8px; padding: 20px; height: 350px;">
+                    <h6 style="text-align: center; color: #000; margin-bottom: 20px;">Monthly Collection Trend</h6>
+                    
+                    <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+                        <div style="margin-right: 20px;">
+                            <span style="color: #28a745; font-size: 12px; font-weight: bold;">Green = Profit</span>
+                        </div>
+                        <div>
+                            <span style="color: #dc3545; font-size: 12px; font-weight: bold;">Red = Loss</span>
+                        </div>
+                    </div>
+                    
+                    <svg width="100%" height="250" style="border-bottom: 2px solid #333;">
+                        <line x1="50" y1="30" x2="550" y2="30" stroke="#e0e0e0" stroke-width="1"/>
+                        <line x1="50" y1="80" x2="550" y2="80" stroke="#e0e0e0" stroke-width="1"/>
+                        <line x1="50" y1="130" x2="550" y2="130" stroke="#e0e0e0" stroke-width="1"/>
+                        <line x1="50" y1="180" x2="550" y2="180" stroke="#e0e0e0" stroke-width="1"/>
+                        
+                        <circle cx="80" cy="150" r="6" fill="#28a745"/>
+                        <text x="80" y="140" text-anchor="middle" font-size="10" fill="#000">₹25L</text>
+                        <text x="80" y="220" text-anchor="middle" font-size="10" fill="#000">Jan</text>
+                        
+                        <line x1="80" y1="150" x2="150" y2="120" stroke="#28a745" stroke-width="4"/>
+                        
+                        <circle cx="150" cy="120" r="6" fill="#28a745"/>
+                        <text x="150" y="110" text-anchor="middle" font-size="10" fill="#000">₹28L</text>
+                        <text x="150" y="220" text-anchor="middle" font-size="10" fill="#000">Feb</text>
+                        
+                        <line x1="150" y1="120" x2="220" y2="90" stroke="#28a745" stroke-width="4"/>
+                        
+                        <circle cx="220" cy="90" r="6" fill="#28a745"/>
+                        <text x="220" y="80" text-anchor="middle" font-size="10" fill="#000">₹32L</text>
+                        <text x="220" y="220" text-anchor="middle" font-size="10" fill="#000">Mar</text>
+                        
+                        <line x1="220" y1="90" x2="290" y2="60" stroke="#28a745" stroke-width="4"/>
+                        
+                        <circle cx="290" cy="60" r="6" fill="#28a745"/>
+                        <text x="290" y="50" text-anchor="middle" font-size="10" fill="#000">₹35L</text>
+                        <text x="290" y="220" text-anchor="middle" font-size="10" fill="#000">Apr</text>
+                        
+                        <line x1="290" y1="60" x2="360" y2="40" stroke="#28a745" stroke-width="4"/>
+                        
+                        <circle cx="360" cy="40" r="6" fill="#28a745"/>
+                        <text x="360" y="30" text-anchor="middle" font-size="10" fill="#000">₹38L</text>
+                        <text x="360" y="220" text-anchor="middle" font-size="10" fill="#000">May</text>
+                        
+                        <line x1="360" y1="40" x2="430" y2="100" stroke="#dc3545" stroke-width="4"/>
+                        
+                        <circle cx="430" cy="100" r="6" fill="#dc3545"/>
+                        <text x="430" y="90" text-anchor="middle" font-size="10" fill="#000">₹30L</text>
+                        <text x="430" y="220" text-anchor="middle" font-size="10" fill="#000">Jun</text>
+                        
+                        <line x1="430" y1="100" x2="500" y2="70" stroke="#28a745" stroke-width="4"/>
+                        
+                        <circle cx="500" cy="70" r="6" fill="#28a745"/>
+                        <text x="500" y="60" text-anchor="middle" font-size="10" fill="#000">₹34L</text>
+                        <text x="500" y="220" text-anchor="middle" font-size="10" fill="#000">Jul</text>
+                    </svg>
+                    
+                    <div style="display: flex; justify-content: space-around; margin-top: 10px; font-size: 11px;">
+                        <span style="color: #28a745;">↗ +12%</span>
+                        <span style="color: #28a745;">↗ +14%</span>
+                        <span style="color: #28a745;">↗ +9%</span>
+                        <span style="color: #28a745;">↗ +8%</span>
+                        <span style="color: #dc3545;">↘ -21%</span>
+                        <span style="color: #28a745;">↗ +13%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Course-wise Analysis -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-graduation-cap me-2"></i>Course-wise Collection Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Students</th>
+                                <th>Collected</th>
+                                <th>Pending</th>
+                                <th>Collection %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in course_data %}
+                            <tr>
+                                <td>{{ course.course }}</td>
+                                <td>{{ course.students }}</td>
+                                <td>₹{{ "{:,.0f}".format(course.collected) }}</td>
+                                <td>₹{{ "{:,.0f}".format(course.pending) }}</td>
+                                <td>
+                                    {% set percentage = (course.collected / (course.collected + course.pending)) * 100 %}
+                                    <span class="badge {% if percentage >= 90 %}bg-success{% elif percentage >= 75 %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {{ "%.1f"|format(percentage) }}%
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Payment Methods -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-credit-card me-2"></i>Payment Methods</h5>
+            </div>
+            <div class="card-body">
+                {% for method in payment_methods %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>{{ method.method }}</span>
+                        <span>{{ method.percentage }}%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar {% if method.method == 'UPI/GPay' %}bg-success{% elif method.method == 'Credit/Debit Card' %}bg-primary{% else %}bg-info{% endif %}" 
+                             style="width: {{ method.percentage }}%"></div>
+                    </div>
+                    <small class="text-muted">₹{{ "{:,.0f}".format(method.amount) }}</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Reports -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-file-alt me-2"></i>Generate Reports</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <button class="btn btn-primary w-100 mb-2" onclick="generateReport('monthly')">
+                            <i class="fas fa-calendar me-2"></i>Monthly Report
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-success w-100 mb-2" onclick="generateReport('course')">
+                            <i class="fas fa-graduation-cap me-2"></i>Course Report
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-warning w-100 mb-2" onclick="generateReport('defaulters')">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Defaulters Report
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-info w-100 mb-2" onclick="generateReport('payment_methods')">
+                            <i class="fas fa-credit-card me-2"></i>Payment Analysis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <a href="{{ url_for('institution_dashboard') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+
+
+
+function generateReport(type) {
+    let reportName = '';
+    switch(type) {
+        case 'monthly': reportName = 'Monthly Collection Report'; break;
+        case 'course': reportName = 'Course-wise Analysis Report'; break;
+        case 'defaulters': reportName = 'Defaulters Report'; break;
+        case 'payment_methods': reportName = 'Payment Methods Analysis'; break;
+    }
+    alert(`${reportName} generated successfully! Check your downloads folder.`);
+}
+</script>
+{% endblock %}

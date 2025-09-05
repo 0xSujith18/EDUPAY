@@ -1,0 +1,187 @@
+{% extends "layout.html" %}
+
+{% block title %}Student Details - {{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Student Information -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user me-2"></i>Student Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6"><strong>Name:</strong></div>
+                    <div class="col-6">{{ student.name }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6"><strong>Email:</strong></div>
+                    <div class="col-6">{{ student.email }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6"><strong>Phone:</strong></div>
+                    <div class="col-6">{{ student.phone }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6"><strong>Course:</strong></div>
+                    <div class="col-6">{{ student.course }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6"><strong>Year:</strong></div>
+                    <div class="col-6">{{ student.year }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6"><strong>Balance:</strong></div>
+                    <div class="col-6 text-success">₹{{ "{:,.0f}".format(student.balance) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parent Information -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-users me-2"></i>Parent Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6"><strong>Parent Name:</strong></div>
+                    <div class="col-6">{{ student.parent_name }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6"><strong>Parent Phone:</strong></div>
+                    <div class="col-6">{{ student.parent_phone }}</div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <button class="btn btn-warning" onclick="sendReminderToParent()">
+                        <i class="fas fa-bell me-2"></i>Send Reminder to Parent
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pending Invoices -->
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-file-invoice me-2"></i>Pending Invoices</h5>
+            </div>
+            <div class="card-body">
+                {% if invoices %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for invoice in invoices %}
+                            <tr class="{% if invoice.status == 'Pending' %}table-warning{% else %}table-success{% endif %}">
+                                <td>{{ invoice.id[:8] }}</td>
+                                <td>{{ invoice.description }}</td>
+                                <td>₹{{ "{:,.0f}".format(invoice.amount) }}</td>
+                                <td>{{ invoice.due_date }}</td>
+                                <td>
+                                    <span class="badge {% if invoice.status == 'Paid' %}bg-success{% else %}bg-warning{% endif %}">
+                                        {{ invoice.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center">No invoices found for this student.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transaction History -->
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-history me-2"></i>Transaction History</h5>
+            </div>
+            <div class="card-body">
+                {% if transactions %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.date }}</td>
+                                <td>{{ transaction.description }}</td>
+                                <td class="{% if transaction.amount > 0 %}text-success{% else %}text-danger{% endif %}">
+                                    ₹{{ "{:,.0f}".format(transaction.amount) }}
+                                </td>
+                                <td>₹{{ "{:,.0f}".format(transaction.balance) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center">No transactions found for this student.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <a href="{{ url_for('student_management') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Student Management
+    </a>
+</div>
+
+<script>
+function sendReminderToParent() {
+    fetch('/send_reminder', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            student_id: '{{ student.username }}',
+            message: 'Your child {{ student.name }} has pending fee payments. Please clear dues at the earliest.',
+            target: 'parent'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Reminder sent to parent successfully!');
+        } else {
+            alert('Failed to send reminder to parent');
+        }
+    });
+}
+</script>
+{% endblock %}

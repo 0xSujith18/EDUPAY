@@ -1,0 +1,291 @@
+{% extends "layout.html" %}
+
+{% block title %}Parent Dashboard{% endblock %}
+
+{% block content %}
+<style>
+.table, .table th, .table td {
+    color: white !important;
+    border-color: rgba(255,255,255,0.3) !important;
+}
+.table tbody tr:hover {
+    background-color: rgba(255,255,255,0.1) !important;
+}
+.table tbody tr:hover td {
+    color: white !important;
+}
+</style>
+<!-- Multi-child Overview Highlight -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h4><i class="fas fa-users me-2"></i>Total Amount Due: ₹32,050</h4>
+                <p class="mb-3">2 Children • 3 Pending Payments</p>
+                <button class="btn btn-warning btn-lg">
+                    <i class="fas fa-credit-card me-2"></i>Pay All Dues
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Parent Info -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user me-2"></i>{{ parent.name }}</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Email:</strong> {{ parent.email }}</p>
+                <p><strong>Phone:</strong> {{ parent.phone }}</p>
+                <div class="alert alert-info">
+                    <i class="fas fa-bell me-2"></i><strong>Auto-Pay:</strong> Enabled for all children
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Children Profile Cards -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-child me-2"></i>Children Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for child in parent.children %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-body">
+                                <h6><i class="fas fa-user-graduate me-2"></i>{{ child }}</h6>
+                                <p class="mb-2">
+                                    <strong>Due:</strong> ₹15,000<br>
+                                    <small>Next: Tuition Fee - Jan 30</small>
+                                    <span class="badge bg-warning">2 Pending</span>
+                                </p>
+                                <button class="btn btn-sm btn-primary">View Details</button>
+                                <button class="btn btn-sm btn-success">Pay Fees</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Consolidated Due List -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-list me-2"></i>Consolidated Due List</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Child</th>
+                                <th>Fee Type</th>
+                                <th>Due Date</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="due-1">
+                                <td>Student1</td>
+                                <td>Tuition Fee</td>
+                                <td>Jan 30, 2024</td>
+                                <td>₹15,000</td>
+                                <td><a href="{{ url_for('parent_pay_due', child='Student1', fee_type='Tuition Fee', amount='15000') }}" class="btn btn-sm btn-primary">Pay</a></td>
+                            </tr>
+                            <tr id="due-2">
+                                <td>Student2</td>
+                                <td>Activity Fee</td>
+                                <td>Feb 05, 2024</td>
+                                <td>₹12,050</td>
+                                <td><a href="{{ url_for('parent_pay_due', child='Student2', fee_type='Activity Fee', amount='12050') }}" class="btn btn-sm btn-primary">Pay</a></td>
+                            </tr>
+                            <tr id="due-3">
+                                <td>Student1</td>
+                                <td>Lab Fee</td>
+                                <td>Feb 15, 2024</td>
+                                <td>₹5,000</td>
+                                <td><a href="{{ url_for('parent_pay_due', child='Student1', fee_type='Lab Fee', amount='5000') }}" class="btn btn-sm btn-primary">Pay</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Center -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bell me-2"></i>Notifications</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert" style="color: #ffffff; background-color: #dc3545; border-color: #dc3545;">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Due Tomorrow:</strong> Student1 Tuition Fee
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Reminder:</strong> Student2 Activity Fee due in 5 days
+                </div>
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <strong>Paid:</strong> Student1 Library Fee completed
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Reminders -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-calendar-check me-2"></i>Payment Reminders</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="emailReminders" checked>
+                    <label class="form-check-label" for="emailReminders">
+                        Email Reminders (3 days before due)
+                    </label>
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="smsReminders" checked>
+                    <label class="form-check-label" for="smsReminders">
+                        SMS Reminders (1 day before due)
+                    </label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="autoPaySetup">
+                    <label class="form-check-label" for="autoPaySetup">
+                        Auto-Pay Setup (Pay automatically on due date)
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-credit-card me-2"></i>Pay All Pending Fees
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="fas fa-download me-2"></i>Download All Receipts
+                    </button>
+                    <button class="btn btn-info">
+                        <i class="fas fa-chart-line me-2"></i>View Payment History
+                    </button>
+                    <button class="btn btn-warning">
+                        <i class="fas fa-cog me-2"></i>Manage Auto-Pay Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment History -->
+<div class="row">
+    <div class="col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-history me-2"></i>Payment History</h5>
+            </div>
+            <div class="card-body">
+                {% if transactions %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th style="color: white !important;">Date</th>
+                                <th style="color: white !important;">Description</th>
+                                <th style="color: white !important;">Amount</th>
+                                <th style="color: white !important;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td style="color: white !important;">{{ transaction.date[:10] }}</td>
+                                <td style="color: white !important;">{{ transaction.description }}</td>
+                                <td class="text-danger">₹{{ "%.2f"|format(transaction.amount|abs) }}</td>
+                                <td><span class="badge bg-success">Success</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4" style="color: white; background-color: rgba(255,255,255,0.1); border-radius: 8px;">
+                    <i class="fas fa-info-circle me-2" style="font-size: 1.2em;"></i>
+                    <strong>No payment history yet.</strong>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
+</div>
+
+<script>
+// Check if payment was just completed and update UI
+window.addEventListener('DOMContentLoaded', function() {
+    // Check for flash messages indicating successful payment
+    const alerts = document.querySelectorAll('.alert-success');
+    alerts.forEach(alert => {
+        if (alert.textContent.includes('Payment successful')) {
+            // Extract payment info and mark as paid
+            const paymentText = alert.textContent;
+            if (paymentText.includes('Student1 - Tuition Fee')) {
+                markAsPaid('due-1', 'Student1', 'Tuition Fee');
+            } else if (paymentText.includes('Student2 - Activity Fee')) {
+                markAsPaid('due-2', 'Student2', 'Activity Fee');
+            } else if (paymentText.includes('Student1 - Lab Fee')) {
+                markAsPaid('due-3', 'Student1', 'Lab Fee');
+            }
+        }
+    });
+});
+
+function markAsPaid(rowId, child, feeType) {
+    const row = document.getElementById(rowId);
+    if (row) {
+        const payButton = row.querySelector('.btn-primary');
+        if (payButton) {
+            payButton.className = 'btn btn-sm btn-success';
+            payButton.innerHTML = 'Paid';
+            payButton.style.pointerEvents = 'none';
+            payButton.removeAttribute('href');
+        }
+        
+        // Add paid badge to the row
+        const lastCell = row.cells[row.cells.length - 1];
+        lastCell.innerHTML += ' <span class="badge bg-success ms-2">Completed</span>';
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Parent Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3><i class="fas fa-users me-2"></i>Parent Portal Login</h3>
+                <p class="mb-0">Manage your children's educational payments</p>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login to Parent Portal</button>
+                </form>
+                
+
+                
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

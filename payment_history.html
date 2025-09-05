@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block title %}Payment History{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5>Payment History</h5>
+        <div>
+            <form class="d-flex" method="GET" action="{{ url_for('payment_history') }}">
+                <input type="month" class="form-control me-2" name="month" value="{{ request.args.get('month', '') }}">
+                <button type="submit" class="btn btn-light">Filter</button>
+            </form>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if transactions %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Reference</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trans in transactions %}
+                    <tr>
+                        <td>{{ trans['date'] }}</td>
+                        <td>{{ trans.get('type', 'Payment') }}</td>
+                        <td>{{ trans['description'] }}</td>
+                        <td>{{ trans.get('reference', '') }}</td>
+                        <td class="{% if trans['amount'] > 0 %}transaction-positive{% else %}transaction-negative{% endif %}">
+                            ${{ "%.2f"|format(trans['amount']) }}
+                        </td>
+                        <td>${{ "%.2f"|format(trans['balance']) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No payment history found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

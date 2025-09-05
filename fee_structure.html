@@ -1,0 +1,252 @@
+{% extends "layout.html" %}
+
+{% block title %}Fee Structure Management{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-file-invoice me-2"></i>Fee Structure Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>Quick Actions:</h6>
+                        <button class="btn btn-primary me-2" onclick="showUpdateModal()">
+                            <i class="fas fa-edit me-2"></i>Update Fee Structure
+                        </button>
+                        <button class="btn btn-success" onclick="showInvoiceModal()">
+                            <i class="fas fa-plus me-2"></i>Generate Invoice
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fee Structure Tables -->
+{% for course, years in fee_structure.items() %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6><i class="fas fa-graduation-cap me-2"></i>{{ course }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Tuition Fee</th>
+                                <th>Lab Fee</th>
+                                <th>Library Fee</th>
+                                <th>Activity Fee</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for year, fees in years.items() %}
+                            <tr>
+                                <td><strong>{{ year }}</strong></td>
+                                <td>₹{{ "{:,.0f}".format(fees.tuition) }}</td>
+                                <td>₹{{ "{:,.0f}".format(fees.lab) }}</td>
+                                <td>₹{{ "{:,.0f}".format(fees.library) }}</td>
+                                <td>₹{{ "{:,.0f}".format(fees.activity) }}</td>
+                                <td><strong>₹{{ "{:,.0f}".format(fees.tuition + fees.lab + fees.library + fees.activity) }}</strong></td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning" onclick="editFee('{{ course }}', '{{ year }}')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Update Fee Structure Modal -->
+<div class="modal fade" id="updateFeeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: rgba(26, 26, 26, 0.95); color: white;">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Fee Structure</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: invert(1);"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateFeeForm">
+                    <div class="mb-3">
+                        <label class="form-label">Course</label>
+                        <select class="form-control" id="updateCourse" required>
+                            <option value="">Select Course</option>
+                            {% for course in fee_structure.keys() %}
+                            <option value="{{ course }}">{{ course }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Year</label>
+                        <select class="form-control" id="updateYear" required>
+                            <option value="">Select Year</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fee Type</label>
+                        <select class="form-control" id="updateFeeType" required>
+                            <option value="">Select Fee Type</option>
+                            <option value="tuition">Tuition Fee</option>
+                            <option value="lab">Lab Fee</option>
+                            <option value="library">Library Fee</option>
+                            <option value="activity">Activity Fee</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amount (₹)</label>
+                        <input type="number" class="form-control" id="updateAmount" min="1" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="updateFeeStructure()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Generate Invoice Modal -->
+<div class="modal fade" id="invoiceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: rgba(26, 26, 26, 0.95); color: white;">
+            <div class="modal-header">
+                <h5 class="modal-title">Generate Invoice</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: invert(1);"></button>
+            </div>
+            <div class="modal-body">
+                <form id="invoiceForm">
+                    <div class="mb-3">
+                        <label class="form-label">Student ID</label>
+                        <input type="number" class="form-control" id="invoiceStudentId" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fee Type</label>
+                        <input type="text" class="form-control" id="invoiceFeeType" placeholder="e.g., Tuition Fee - Semester 1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amount (₹)</label>
+                        <input type="number" class="form-control" id="invoiceAmount" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Due Date</label>
+                        <input type="date" class="form-control" id="invoiceDueDate" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="generateInvoice()">Generate Invoice</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('institution_dashboard') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+
+<script>
+function showUpdateModal() {
+    new bootstrap.Modal(document.getElementById('updateFeeModal')).show();
+}
+
+function showInvoiceModal() {
+    new bootstrap.Modal(document.getElementById('invoiceModal')).show();
+}
+
+function editFee(course, year) {
+    document.getElementById('updateCourse').value = course;
+    document.getElementById('updateYear').value = year;
+    showUpdateModal();
+}
+
+function updateFeeStructure() {
+    const course = document.getElementById('updateCourse').value;
+    const year = document.getElementById('updateYear').value;
+    const feeType = document.getElementById('updateFeeType').value;
+    const amount = document.getElementById('updateAmount').value;
+    
+    if (!course || !year || !feeType || !amount) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    fetch('/update-fee-structure', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            course: course,
+            year: year,
+            fee_type: feeType,
+            amount: parseFloat(amount)
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Fee structure updated successfully!');
+            bootstrap.Modal.getInstance(document.getElementById('updateFeeModal')).hide();
+            location.reload();
+        } else {
+            alert('Failed to update fee structure');
+        }
+    });
+}
+
+function generateInvoice() {
+    const studentId = document.getElementById('invoiceStudentId').value;
+    const feeType = document.getElementById('invoiceFeeType').value;
+    const amount = document.getElementById('invoiceAmount').value;
+    const dueDate = document.getElementById('invoiceDueDate').value;
+    
+    if (!studentId || !feeType || !amount || !dueDate) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    fetch('/generate-invoice', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            student_id: parseInt(studentId),
+            fee_type: feeType,
+            amount: parseFloat(amount),
+            due_date: dueDate
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(`Invoice generated successfully! Invoice ID: ${data.invoice_id}`);
+            bootstrap.Modal.getInstance(document.getElementById('invoiceModal')).hide();
+            document.getElementById('invoiceForm').reset();
+        } else {
+            alert('Failed to generate invoice');
+        }
+    });
+}
+</script>
+{% endblock %}

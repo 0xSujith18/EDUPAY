@@ -1,0 +1,317 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<!-- Security & Transaction Monitoring Highlight -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4><i class="fas fa-shield-alt me-2"></i>Security Status: All Systems Secure</h4>
+                        <p class="mb-0">2 Fraud alerts detected today • 15,247 transactions monitored</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <button class="btn btn-warning">
+                            <i class="fas fa-eye me-2"></i>View Security Logs
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Admin Info -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user-shield me-2"></i>{{ user.name }} - System Admin</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Admin ID:</strong> {{ user.id }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Last Login:</strong> Today, 09:30 AM</p>
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i><strong>Status:</strong> Super Admin
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Platform-wide Analytics -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line me-2"></i>Platform Analytics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h6>Total Users</h6>
+                                <h4>52,347</h4>
+                                <small>+1,247 this month</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6>Institutions</h6>
+                                <h4>523</h4>
+                                <small>+12 this month</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h6>Transactions</h6>
+                                <h4>₹125Cr</h4>
+                                <small>This month</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h6>Success Rate</h6>
+                                <h4>99.8%</h4>
+                                <small>Last 30 days</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Transaction Monitoring -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-search-dollar me-2"></i>Transaction Monitoring</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Institution</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Risk Level</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10:45 AM</td>
+                                <td>ABC College</td>
+                                <td>₹15,000</td>
+                                <td><span class="badge bg-success">Success</span></td>
+                                <td><span class="badge bg-success">Low</span></td>
+                                <td><button class="btn btn-sm btn-info">View</button></td>
+                            </tr>
+                            <tr class="table-warning">
+                                <td>10:42 AM</td>
+                                <td>XYZ University</td>
+                                <td>₹50,000</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                                <td><span class="badge bg-warning">Medium</span></td>
+                                <td><button class="btn btn-sm btn-warning">Review</button></td>
+                            </tr>
+                            <tr class="table-danger">
+                                <td>10:38 AM</td>
+                                <td>DEF Institute</td>
+                                <td>₹1,00,000</td>
+                                <td><span class="badge bg-danger">Flagged</span></td>
+                                <td><span class="badge bg-danger">High</span></td>
+                                <td><button class="btn btn-sm btn-danger">Investigate</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issue Tracking -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bug me-2"></i>Issue Tracking</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Critical:</strong> 2 Payment gateway timeouts
+                </div>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <strong>High:</strong> 5 Login failures detected
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Medium:</strong> 12 Support tickets pending
+                </div>
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <strong>Resolved:</strong> 45 issues this week
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Fraud Detection Alerts -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>Fraud Detection Alerts</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <strong>Suspicious Activity:</strong> Multiple failed login attempts from IP 192.168.1.100
+                    <button class="btn btn-sm btn-danger float-end">Block IP</button>
+                </div>
+                <div class="alert alert-warning">
+                    <strong>Unusual Pattern:</strong> Large transaction amount from new institution
+                    <button class="btn btn-sm btn-warning float-end">Review</button>
+                </div>
+                <div class="alert alert-info">
+                    <strong>Velocity Check:</strong> High transaction frequency detected
+                    <button class="btn btn-sm btn-info float-end">Monitor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compliance Logs -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-clipboard-check me-2"></i>Compliance Logs</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>PCI DSS Compliance</span>
+                        <span class="badge bg-success">Compliant</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Data Privacy (GDPR)</span>
+                        <span class="badge bg-success">Compliant</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>RBI Guidelines</span>
+                        <span class="badge bg-success">Compliant</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Audit Trail</span>
+                        <span class="badge bg-warning">Pending Review</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Role Management -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-users-cog me-2"></i>User Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Institution</th>
+                                <th>Last Active</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Admin</td>
+                                <td><span class="badge bg-danger">Super Admin</span></td>
+                                <td>System</td>
+                                <td>2 min ago</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-info">Edit</button>
+                                    <button class="btn btn-sm btn-warning">Suspend</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Jane Manager</td>
+                                <td><span class="badge bg-primary">Institution Admin</span></td>
+                                <td>ABC College</td>
+                                <td>1 hour ago</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-info">Edit</button>
+                                    <button class="btn btn-sm btn-warning">Suspend</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Settings -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-cogs me-2"></i>System Settings</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-database me-2"></i>Database Backup
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="fas fa-shield-alt me-2"></i>Security Settings
+                    </button>
+                    <button class="btn btn-info">
+                        <i class="fas fa-bell me-2"></i>Notification Config
+                    </button>
+                    <button class="btn btn-warning">
+                        <i class="fas fa-chart-bar me-2"></i>System Reports
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="fas fa-power-off me-2"></i>Maintenance Mode
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
+</div>
+{% endblock %}

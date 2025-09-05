@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+
+{% block title %}Student Management{% endblock %}
+
+{% block content %}
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h4>{{ stats.total_students }}</h4>
+                <p class="mb-0">Total Students</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h4>{{ stats.paid_students }}</h4>
+                <p class="mb-0">Fees Paid</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <h4>{{ stats.overdue_students }}</h4>
+                <p class="mb-0">Overdue</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h4>₹{{ "{:,.0f}".format(stats.total_pending) }}</h4>
+                <p class="mb-0">Total Pending</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Student List -->
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fas fa-users me-2"></i>Student Management</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Balance</th>
+                        <th>Pending</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr class="{% if student.status == 'Overdue' %}table-danger{% else %}table-success{% endif %}">
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.course }}</td>
+                        <td>{{ student.year }}</td>
+                        <td>₹{{ "{:,.0f}".format(student.balance) }}</td>
+                        <td>₹{{ "{:,.0f}".format(student.pending_amount) }}</td>
+                        <td>
+                            <span class="badge {% if student.status == 'Paid' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ student.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('student_details', student_id=student.id) }}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <button class="btn btn-sm btn-warning" onclick="sendReminder('{{ student.username }}', 'Fee payment reminder')">
+                                <i class="fas fa-bell"></i> Remind
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('institution_dashboard') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+
+<script>
+function sendReminder(studentId, message) {
+    fetch('/send_reminder', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            student_id: studentId,
+            message: message,
+            target: 'student'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Reminder sent successfully!');
+        } else {
+            alert('Failed to send reminder');
+        }
+    });
+}
+</script>
+{% endblock %}

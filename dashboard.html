@@ -1,0 +1,225 @@
+{% extends "layout.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<style>
+.table, .table th, .table td {
+    color: white !important;
+    border-color: rgba(255,255,255,0.3) !important;
+}
+.table tbody tr:hover {
+    background-color: rgba(255,255,255,0.1) !important;
+}
+.table tbody tr:hover td {
+    color: white !important;
+}
+</style>
+<!-- Next Due Date Highlight -->
+{% if invoices %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-warning bg-gradient">
+            <div class="card-body text-center">
+                <h4><i class="fas fa-exclamation-triangle text-warning me-2"></i>Next Due: {{ invoices[0].due_date }}</h4>
+                <p class="mb-3">{{ invoices[0].description }} - ₹{{ "%.2f"|format(invoices[0].amount) }}</p>
+                <a href="{{ url_for('pay_invoice', invoice_id=invoices[0].id) }}" class="btn btn-warning btn-lg">
+                    <i class="fas fa-credit-card me-2"></i>Pay Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <!-- Student Info Card -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user-graduate me-2"></i>{{ user.name }}</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Student ID:</strong> {{ user.id }}</p>
+                <p><strong>Course:</strong> {{ user.course }}</p>
+                <p><strong>Balance:</strong> <span class="balance">₹{{ "%.2f"|format(user.balance) }}</span></p>
+                <div class="alert alert-success">
+                    <i class="fas fa-gift me-2"></i><strong>Scholarship:</strong> Merit Scholarship (10% off)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Dues -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-calendar-alt me-2"></i>Upcoming Dues</h5>
+            </div>
+            <div class="card-body">
+                {% if invoices %}
+                <div class="row">
+                    {% for invoice in invoices %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card {% if invoice.due_soon %}border-danger{% else %}border-primary{% endif %}">
+                            <div class="card-body">
+                                <h6>{{ invoice.description }}</h6>
+                                <p class="mb-2">
+                                    <strong>₹{{ "%.2f"|format(invoice.amount) }}</strong><br>
+                                    <small>Due: {{ invoice.due_date }}</small>
+                                    {% if invoice.due_soon %}
+                                    <span class="badge bg-danger">Urgent</span>
+                                    {% endif %}
+                                </p>
+                                <a href="{{ url_for('pay_invoice', invoice_id=invoice.id) }}" class="btn btn-sm btn-primary">Pay</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>All fees are up to date!
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Transaction History -->
+    <div class="col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-history me-2"></i>Recent Transactions</h5>
+            </div>
+            <div class="card-body">
+                {% if transactions %}
+                <div class="table-responsive">
+                    <table class="table table-sm" style="color: white !important;">
+                        <thead>
+                            <tr>
+                                <th style="color: white !important; border-color: rgba(255,255,255,0.3) !important;">Date</th>
+                                <th style="color: white !important; border-color: rgba(255,255,255,0.3) !important;">Description</th>
+                                <th style="color: white !important; border-color: rgba(255,255,255,0.3) !important;">Amount</th>
+                                <th style="color: white !important; border-color: rgba(255,255,255,0.3) !important;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td style="color: white !important; border-color: rgba(255,255,255,0.2) !important;">{{ transaction.date[:10] }}</td>
+                                <td style="color: white !important; border-color: rgba(255,255,255,0.2) !important;">{{ transaction.description }}</td>
+                                <td style="border-color: rgba(255,255,255,0.2) !important;" class="{% if transaction.amount < 0 %}text-danger{% else %}text-success{% endif %}">
+                                    ₹{{ "%.2f"|format(transaction.amount) }}
+                                </td>
+                                <td style="color: white !important; border-color: rgba(255,255,255,0.2) !important;">
+                                    <span class="badge bg-success">Success</span>
+                                    {% if transaction.get('transaction_id') %}
+                                    <a href="{{ url_for('view_receipt') }}" class="btn btn-sm btn-outline-primary ms-2" style="font-size: 0.75rem;">View Receipt</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4" style="color: white; background-color: rgba(255,255,255,0.1); border-radius: 8px;">
+                    <i class="fas fa-info-circle me-2" style="font-size: 1.2em;"></i>
+                    <strong>No transactions yet.</strong>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Support Chat Widget -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1000;">
+    <button class="btn rounded-circle" style="width: 60px; height: 60px; background: #0074d9; border: none; color: white; box-shadow: 0 4px 12px rgba(0,116,217,0.4);" data-bs-toggle="modal" data-bs-target="#supportModal">
+        💬
+    </button>
+</div>
+
+<!-- Support Modal -->
+<div class="modal fade" id="supportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #1a1a1a; color: white; border-bottom: 1px solid #333;">
+                <h5 class="modal-title" style="color: white;">💬 Support Chat</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="background: #2a2a2a; color: white;">
+                <div class="alert" style="background: #333; border: 1px solid #555; color: white;">
+                    <strong>Quick Help:</strong><br>
+                    💳 How to pay fees? Use the "Pay Now" button<br>
+                    ❌ Payment failed? Contact support<br>
+                    📄 Receipt not received? Check downloads
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" style="color: white; font-weight: 600;">Your Message:</label>
+                    <textarea class="form-control" rows="3" placeholder="Type your question..." style="background: #333; border: 1px solid #555; color: white;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer" style="background: #1a1a1a; border-top: 1px solid #333;">
+                <button type="button" class="btn" style="background: #333; color: white; border: 1px solid #555;" onclick="sendSupportMessage()">📤 Send Message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function sendSupportMessage() {
+    const textarea = document.querySelector('#supportModal textarea');
+    const message = textarea.value.trim();
+    
+    if (!message) {
+        alert('Please enter a message');
+        return;
+    }
+    
+    // Disable button during sending
+    const button = document.querySelector('#supportModal button[onclick="sendSupportMessage()"]');
+    button.disabled = true;
+    button.textContent = 'Sending...';
+    
+    fetch('/send-support-message', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({message: message})
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert('✅ Message sent to admin successfully!');
+            textarea.value = '';
+            const modal = document.getElementById('supportModal');
+            if (window.bootstrap && bootstrap.Modal) {
+                bootstrap.Modal.getInstance(modal)?.hide();
+            } else {
+                modal.style.display = 'none';
+            }
+        } else {
+            alert('❌ Error: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('❌ Connection error. Please try again.');
+    })
+    .finally(() => {
+        // Re-enable button
+        button.disabled = false;
+        button.innerHTML = '📤 Send Message';
+    });
+}
+</script>
+{% endblock %}
